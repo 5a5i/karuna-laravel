@@ -29,8 +29,9 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage
 
-# Step 8: Expose port 8000
-EXPOSE 8000
+# Step 8: Run migrations and seed the database
+# These commands will run every time the container starts
+CMD php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=8000
 
-# Step 9: Start the Laravel server
-CMD php artisan serve --host=0.0.0.0 --port=8000
+# Step 9: Expose port 8000
+EXPOSE 8000
